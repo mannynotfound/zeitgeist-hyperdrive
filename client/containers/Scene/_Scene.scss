@@ -1,5 +1,27 @@
 .stream-element {
-  border: 3px solid #ccc;
   background: white;
   z-index: 10;
+}
+
+.ZeitgeistTweet .tweet {
+  border: 3px solid #ccc !important;
+  margin-top: 10px;
+}
+
+.Story-headline {
+  font-size: 2.4em;
+  margin: 5px 0 20px 0;
+}
+
+.Story-source,
+.ZeitgeistTweet-source {
+  color: #555;
+}
+
+.Story-link,
+.Story-link:visited {
+  color: inherit;
+  &:hover {
+    color: $tumblrColor;
+  }
 }

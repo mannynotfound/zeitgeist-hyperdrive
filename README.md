@@ -2,27 +2,13 @@
   <img width="500px" src="https://raw.githubusercontent.com/mannynotfound/twitter-hyperdrive/master/twitter-hyperdrive.gif" />
 </p>
 
-# twitter hyperdrive
+# zeitgeist-hyperdrive
 
-[react-tweet](http://github.com/mannynotfound/react-tweet) + [html-hyperdrive](http://github.com/mannynotfound/html-hyperdrive).
+[zeitgiest](http://github.com/mannynotfound/zeitgeist) + [html-hyperdrive](http://github.com/mannynotfound/html-hyperdrive).
 
 Don't forget your towel.
 
-
 # Usage
-
-### Environment Variables
-
-Create an `env.json` in the root of the folder with the following keys:
-
-```js
-{
-  "CONSUMER_KEY": "XXX",
-  "CONSUMER_SECRET": "XXX",
-  "COOKIE_NAME": "my-app-name"
-}
-```
-
 
 ```bash
 $ npm install

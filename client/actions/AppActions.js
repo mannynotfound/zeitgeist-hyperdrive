@@ -20,8 +20,6 @@ export function populateZeitgeistSuccess(data) {
 }
 
 export function populateZeitgeist() {
-  console.log('POPULATING DATA!')
-
   return (dispatch) => (
     fetch(`${API}/populateZeitgeist`)
       .then((response) => response.json())

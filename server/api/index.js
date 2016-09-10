@@ -36,17 +36,19 @@ function getZeitgeist(url) {
 }
 
 function populateCache() {
-  console.log('POPULATING DA CACHE')
+  const baseUrl = 'https://zeitgeist-404.firebaseio.com'
 
-  function getTrendTweets(trend) {
-    getZeitgeist(`https://zeitgeist-404.firebaseio.com/tweets/${trend}.json?orderBy="$key"&limitToFirst=100`)
-      .then((trendResp) => zeitgeist.tweets[trend] = trendResp)
-      .catch((err) => console.log('GET TREND TWEETS ERROR! >> ', err))
+  function adaptZeitgiest(target, val) {
+    getZeitgeist(`${baseUrl}/${target}/${val}.json?orderBy="$key"&limitToFirst=100`)
+      .then((resp) => zeitgeist[target][val] = resp)
+      .catch((err) => console.log(`GET ${target} ERROR! >> `, err))
   }
 
-  getZeitgeist('https://zeitgeist-404.firebaseio.com/tweets.json?shallow=true')
-    .then((resp) => Object.keys(resp).forEach(getTrendTweets))
-    .catch((err) => console.log('GET ALL TRENDS ERROR! >> ', err))
+  ['tweets', 'stories'].forEach((type) => {
+    getZeitgeist(`${baseUrl}/${type}.json?shallow=true`)
+      .then((resp) => Object.keys(resp).forEach(adaptZeitgiest.bind(this, type)))
+      .catch((err) => console.log(`GET ALL ${type} ERROR! >> `, err))
+  })
 }
 
 populateCache()

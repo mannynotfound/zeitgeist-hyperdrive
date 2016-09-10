@@ -3,11 +3,50 @@ import {findDOMNode, render} from 'react-dom'
 import Tweet from 'react-tweet'
 import {isEqual} from 'lodash'
 
+class Story extends React.Component {
+  static displayName = 'Story'
+
+  static propTypes = {
+    data: PropTypes.object
+  }
+
+  render() {
+    const {data} = this.props
+    return (
+      <div className="Story">
+        <a className="Story-link" href={data.link} target="_blank">
+          <i className="Story-source">{data.source}</i>
+          <h1 className="Story-headline">{data.headline}</h1>
+        </a>
+      </div>
+    )
+  }
+}
+
+class ZeitgeistTweet extends React.Component {
+  static displayName = 'ZeitgeistTweet'
+
+  static propTypes = {
+    data: PropTypes.object
+  }
+
+  render() {
+    const {data} = this.props
+
+    return (
+      <div className="ZeitgeistTweet">
+        <i className="ZeitgeistTweet-source">{data.source}</i>
+        <Tweet data={data} />
+      </div>
+    )
+  }
+}
+
 class Scene extends React.Component {
   static displayName = 'Scene'
 
   static propTypes = {
-    tweets: PropTypes.array
+    elements: PropTypes.array
   }
 
   constructor(props) {
@@ -20,7 +59,7 @@ class Scene extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (!isEqual(props.tweets, this.props.tweets)) {
+    if (!isEqual(props.elements, this.props.elements)) {
       this.resetScene()
     }
   }
@@ -40,16 +79,16 @@ class Scene extends React.Component {
   createNewScene() {
     const container = findDOMNode(this.refs.scene)
     /* eslint-disable no-param-reassign */
-    const tweets = this.props.tweets.map((t, i) => {
-      const newTweet = {...t}
-      newTweet.index = i
-      return newTweet
+    const elements = this.props.elements.map((el, i) => {
+      const newEl = {...el}
+      newEl.index = i
+      return newEl
     })
 
     const limit = 50
-    this.visibleTweets = tweets.slice(0, limit)
+    this.visibleElements = elements.slice(0, limit)
 
-    const htmlElms = this.createHTML(this.visibleTweets)
+    const htmlElms = this.createHTML(this.visibleElements)
     const cfg = {
       mountCb: this.mountObj.bind(this)
     }
@@ -58,20 +97,20 @@ class Scene extends React.Component {
     this.scene = new HTMLHyperdrive(container, htmlElms, cfg)
     this.scene.startScene()
 
-    if (tweets.length <= limit) {
+    if (elements.length <= limit) {
       return
     }
 
-    this.invisibleTweets = tweets.slice(limit)
+    this.invisibleElements = elements.slice(limit)
 
     clearInterval(this.timer)
     this.timer = setInterval(() => {
       if (!this.cycle) return
 
-      const next = this.invisibleTweets.shift()
-      const remove = this.visibleTweets.shift()
-      this.invisibleTweets.push(remove)
-      this.visibleTweets.push(next)
+      const next = this.invisibleElements.shift()
+      const remove = this.visibleElements.shift()
+      this.invisibleElements.push(remove)
+      this.visibleElements.push(next)
 
       const opts = this.createHTML(next)
       this.scene.removeObject(remove.index)
@@ -81,11 +120,14 @@ class Scene extends React.Component {
 
   mountObj(obj) {
     const idx = parseInt(obj.name.replace('stream_element_', ''), 10)
-    render(<Tweet data={this.props.tweets[idx]} />, obj.element)
+    const el = this.props.elements[idx]
+    const CptToRender = el.headline ? Story : ZeitgeistTweet
+
+    render(<CptToRender data={this.props.elements[idx]} />, obj.element)
   }
 
-  createHTML(tweets) {
-    const tweetHTML = {
+  createHTML(elements) {
+    const elHtml = {
       style: {
         width: '590px',
         height: 'auto',
@@ -93,11 +135,11 @@ class Scene extends React.Component {
       html: '<div></div>'
     }
 
-    if (Array.isArray(tweets)) {
-      return tweets.map(() => ({...tweetHTML}))
+    if (Array.isArray(elements)) {
+      return elements.map(() => ({...elHtml}))
     }
 
-    return {...tweetHTML}
+    return {...elHtml}
   }
 
   render() {
