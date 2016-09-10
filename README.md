@@ -4,7 +4,7 @@
 
 # zeitgeist-hyperdrive
 
-[zeitgiest](http://github.com/mannynotfound/zeitgeist) + [html-hyperdrive](http://github.com/mannynotfound/html-hyperdrive).
+[zeitgeist](http://github.com/mannynotfound/zeitgeist) + [html-hyperdrive](http://github.com/mannynotfound/html-hyperdrive).
 
 Don't forget your towel.
 
